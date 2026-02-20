@@ -2,6 +2,7 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
+import os
 
 st.set_page_config(page_title="Spotify Mood Classifier", page_icon="🎵", layout="wide")
 
@@ -12,8 +13,12 @@ st.markdown("---")
 
 @st.cache_resource
 def load_models():
-    models = joblib.load("trained_models.pkl")
-    scaler = joblib.load("scaler.pkl")
+    base_dir = os.path.dirname(__file__)
+    model_path = os.path.join(base_dir, "trained_models.pkl")
+    scaler_path = os.path.join(base_dir, "scaler.pkl")
+    
+    models = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
     return models, scaler
 
 try:
