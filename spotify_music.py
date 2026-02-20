@@ -14,9 +14,12 @@ st.markdown("---")
 @st.cache_resource
 def load_models():
     base_dir = os.path.dirname(__file__)
+    
+    #full paths to your files
     model_path = os.path.join(base_dir, "trained_models.pkl")
     scaler_path = os.path.join(base_dir, "scaler.pkl")
     
+    #load the files
     models = joblib.load(model_path)
     scaler = joblib.load(scaler_path)
     return models, scaler
