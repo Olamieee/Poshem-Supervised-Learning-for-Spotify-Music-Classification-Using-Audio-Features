@@ -1,1 +1,4 @@
 Supervised Learning for Spotify Music Classification Using Audio Features.pdf
+*.pkl
+trained_models.pkl
+scaler.pkl

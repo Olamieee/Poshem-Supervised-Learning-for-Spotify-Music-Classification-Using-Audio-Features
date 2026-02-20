@@ -1,6 +1,7 @@
+gdown
 streamlit
-pandas
-scikit-learn
-matplotlib
-seaborn
 joblib
+scikit-learn
+lightgbm
+numpy
+pandas

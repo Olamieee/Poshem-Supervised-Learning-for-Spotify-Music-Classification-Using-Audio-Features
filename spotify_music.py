@@ -2,6 +2,7 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
+import gdown
 import os
 
 st.set_page_config(page_title="Spotify Mood Classifier", page_icon="🎵", layout="wide")
@@ -13,26 +14,26 @@ st.markdown("---")
 
 @st.cache_resource
 def load_models():
-    base_dir = os.path.dirname(__file__)
-    
-    #full paths to your files
-    model_path = os.path.join(base_dir, "trained_models.pkl")
-    scaler_path = os.path.join(base_dir, "scaler.pkl")
-    
-    #load the files
-    models = joblib.load(model_path)
-    scaler = joblib.load(scaler_path)
-    return models, scaler
+    try:
+        models_id = "1GeBJnpbg5GzQ7wKgmIFAyY_a-emLEY0H"
+        scaler_id = "16wfI815IRVrzSaiU6anFI-JKG28KRKNS"
+        
+        if not os.path.exists("trained_models.pkl"):
+            with st.spinner("Loading models from cloud (first time only)..."):
+                gdown.download(f"https://drive.google.com/uc?id={models_id}", "trained_models.pkl", quiet=False)
+                gdown.download(f"https://drive.google.com/uc?id={scaler_id}", "scaler.pkl", quiet=False)
+        
+        models = joblib.load("trained_models.pkl")
+        scaler = joblib.load("scaler.pkl")
+        return models, scaler
+    except Exception as e:
+        st.error(f"Error loading models: {str(e)}")
+        st.error("Please contact the developer.")
+        st.stop()
 
-try:
-    models, scaler = load_models()
-    st.success("✓ Models loaded successfully")
-except:
-    st.error("Error loading models. Make sure trained_models.pkl and scaler.pkl are in the same directory.")
-    st.stop()
+models, scaler = load_models()
 
 label_maps = {0: 'Sad 😢', 1: 'Happy 😊', 2: 'Energetic ⚡', 3: 'Calm 😌'}
-reverse_map = {'Sad 😢': 0, 'Happy 😊': 1, 'Energetic ⚡': 2, 'Calm 😌': 3}
 
 model_options = list(models.keys())
 selected_model = st.sidebar.selectbox("Select Model", model_options, index=model_options.index('Random Forest'))
